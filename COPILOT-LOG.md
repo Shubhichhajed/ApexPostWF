@@ -93,7 +93,13 @@ dotnet test tests/ApexPost.UnitTests --filter "FullyQualifiedName~BranchAdminist
 
 Expected: `CreateAsync_NewCode_StagesNormalisedBranchAndCommitsOnce` **fails**. The strict `IBranchRepository` mock receives `GetByCodeAsync("ind09", ...)`, which has no setup, so Moq throws `MockException`. Without normalisation, a second branch with the same code in different case would be created.
 
-Observed: <!-- paste the failing test name and message -->
+Observed:
+
+```text
+Failed ApexPost.UnitTests.Application.BranchAdministrationServiceTests.CreateAsync_NewCode_StagesNormalisedBranchAndCommitsOnce [5 ms]
+  Moq.MockException : IBranchRepository.GetByCodeAsync("ind09", CancellationToken) invocation failed with mock behavior Strict.
+```
+
 
 ### Break 2: remove the duplicate check
 
@@ -104,7 +110,13 @@ Observed: <!-- paste the failing test name and message -->
 
 Expected: `CreateAsync_DuplicateCode_ThrowsDomainExceptionAndNeverCommits` **fails**. The service now goes on to call `AddAsync`, which the strict mock has no setup for, so a `MockException` is thrown instead of the expected `DomainException` ("Assert.Throws() Failure: Exception type was not an exact match").
 
-Observed: <!-- paste the failing test name and message -->
+Observed:
+
+```text
+Failed ApexPost.UnitTests.Application.BranchAdministrationServiceTests.CreateAsync_DuplicateCode_ThrowsDomainExceptionAndNeverCommits [8 ms]
+  Assert.Throws() Failure: Exception type was not an exact match
+```
+
 
 ### Break 3: allow a delivered shipment back onto the road
 
@@ -116,7 +128,17 @@ dotnet test tests/ApexPost.Specs --filter "FullyQualifiedName~ShipmentStatusLife
 
 Expected: the scenario **"A delivered shipment cannot go back on the road" fails** at `Then the move is refused with the message ...`, because `Assert.NotNull(state.Error)` finds no exception. `ShipmentStatusRulesTests.CanTransition_SkippedBackwardsOrFinal_ReturnsFalse("Delivered","InTransit")` fails as well.
 
-Observed: <!-- paste the failing scenario/test name and message -->
+Observed:
+
+```text
+Failed A delivered shipment cannot go back on the road [12 ms]
+  Assert.NotNull() Failure: Value is null
+Failed ApexPost.UnitTests.Api.ShipmentStatusRulesTests.CanTransition_SkippedBackwardsOrFinal_ReturnsFalse(current: "Delivered", next: "InTransit") [1 ms]
+  Assert.False() Failure
+Failed ApexPost.UnitTests.Api.ShipmentStatusRulesTests.Apply_DeliveredBackToInTransit_ThrowsShipmentConflictException [3 ms]
+  Assert.Throws() Failure: No exception was thrown
+```
+
 
 All three changes were reverted and the suite was green again afterwards.
 

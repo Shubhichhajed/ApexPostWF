@@ -165,14 +165,14 @@ $env:APEXPOST_TEST_CONNECTION = "Server=localhost,1433;User Id=sa;Password=<loca
 
 | Project | Passed | Failed | Skipped |
 |---|---|---|---|
-| ApexPost.UnitTests | | | |
-| ApexPost.Courier.Tests | | | |
-| ApexPost.IntegrationTests | | | |
-| ApexPost.Api.IntegrationTests | | | |
-| ApexPost.Specs | | | |
-| **Total** | | | |
+| ApexPost.UnitTests | 213 | 0 | 0 |
+| ApexPost.Courier.Tests | 44 | 0 | 0 |
+| ApexPost.IntegrationTests | 35 | 0 | 0 |
+| ApexPost.Api.IntegrationTests | 15 | 0 | 0 |
+| ApexPost.Specs | 20 | 0 | 0 |
+| **Total** | **327** | **0** | **0** |
 
-Test Explorer screenshot / run log: `docs/test-run/`.
+Run on 2026-11-15 with .NET SDK 10.0.403. Full console output: `docs/test-run/test-run.txt`; Test Explorer screenshot in `docs/test-run/`.
 
 ---
 
