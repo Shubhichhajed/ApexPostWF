@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    End-to-end API tests: WebApplicationFactory hosts ApexPost.Api in memory against a throw-away SQL Server
+    database, with a header-based test authentication scheme instead of JWT. Kept separate from
+    ApexPost.IntegrationTests because that project hosts the Week 3 MVC app, and two entry-point
+    Program classes cannot share one test project.
+  -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>ApexPost.Api.IntegrationTests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/ApexPost.Api/ApexPost.Api.csproj" />
+    <ProjectReference Include="../../src/ApexPost.Infrastructure/ApexPost.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/ApexPost.Domain/ApexPost.Domain.csproj" />
+  </ItemGroup>
+</Project>
