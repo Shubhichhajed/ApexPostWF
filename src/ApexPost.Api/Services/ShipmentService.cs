@@ -66,7 +66,7 @@ public sealed class ShipmentService : IShipmentService
             Id = trackingNumber, WeightKg = weight, Kind = ShipmentKind.Parcel,
             ServiceLevel = rate.ServiceLevel, DestinationZone = rate.Zone,
             LengthCm = 1m, WidthCm = 1m, HeightCm = 1m,
-            Price = rate.BaseRate + (weight * rate.PerKgRate), CreatedAt = _time.GetUtcNow(),
+            Price = ShipmentPricing.Quote(rate, weight).Total, CreatedAt = _time.GetUtcNow(),
             BranchCode = branchCode
         };
         _dbContext.Shipments.Add(shipment);
@@ -110,7 +110,7 @@ public sealed class ShipmentService : IShipmentService
             cancellationToken)
             ?? throw new ArgumentException($"No configured shipping rate supports a {weight:0.###} kg parcel for this shipment zone.");
         shipment.WeightKg = weight;
-        shipment.Price = rate.BaseRate + (weight * rate.PerKgRate);
+        shipment.Price = ShipmentPricing.Quote(rate, weight).Total;
         data.RecipientName = recipientName.Trim();
         data.RecipientPhone = recipientPhone.Trim();
         data.RecipientAddress = recipientAddress.Trim();
